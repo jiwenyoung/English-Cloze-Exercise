@@ -1,0 +1,16 @@
+__pycache__/
+bin/
+build/
+dist/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
+speed.spec
+lib64
+link *
+
+
+
+ 
