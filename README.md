@@ -8,4 +8,6 @@ To run the program, you have to first of all run "setup" command which create da
 
 "config.ini" is the configuration file which could be used to setup most of features.
 
+After the input prompt, you can remove a question by entering "r" or quit the program by entering "q", as well as input A,B,C,D for pick.
+
 Until now, this software only offer cli interface.
