@@ -2,6 +2,7 @@ from .Origin import Origin
 from .Question import Question
 from .Helper import Helper
 from .View import View
+from configuration.configuration import Configuration
 
 class FileOrigin(Origin, Helper):
     def __init__(self, file):
@@ -9,10 +10,11 @@ class FileOrigin(Origin, Helper):
         self.doc = ""
         self.rawtext = ""
         self.data = set()
+        self.config = Configuration()
 
     @View.log("Reading file...")
     def pull(self):
-        View.render(f"Reading {self.file}")
+        View.render(self.config.literal["pull_file_prompt"].format(self.file))
         doc = ""
         with open(self.file) as file:
             for line in file:
@@ -29,7 +31,9 @@ class FileOrigin(Origin, Helper):
     def clean(self):
         rawtext = self.rawtext
         sentences = super().separate_text(rawtext)
-        self.data = super().clean_each_sentence(sentences, 10, 20)
+        self.data = super().clean_each_sentence(sentences,
+                                                self.config.sentence_shortest,
+                                                self.config.sentence_longest)
         return self
 
     @View.log("Transform data into questions...")

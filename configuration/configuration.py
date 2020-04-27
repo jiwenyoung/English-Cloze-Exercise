@@ -6,7 +6,7 @@ class Configuration:
         config.read("config.ini")
 
         for key in config:
-            if key in ["files", "keys", "userAgent"]:
+            if key in ["files", "keys", "userAgent", "sentence"]:
                 for item in config[key]:
                     setattr(self, item, config[key][item])
             elif key in ["literal"]:
