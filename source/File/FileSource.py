@@ -1,8 +1,8 @@
 import os
 import threading
 from .FileOrigin import FileOrigin
-from .Source import Source
-from .View import View
+from ..Source import Source
+from ..View import View
 
 class FileSource(Source):
     def __init__(self,path,keywords):

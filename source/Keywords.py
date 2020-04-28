@@ -1,7 +1,7 @@
 import threading
 import json
 import sqlite3 as sqlite
-from urllib import request
+import requests
 from queue import Queue
 from configuration.configuration import Configuration
 from .View import View
@@ -24,10 +24,8 @@ class Keywords:
     def fetch(self):
         def gain(url):
             try:
-                req = request.Request(url)
-                req.add_header('User-Agent', self.config.useragent)
-                with request.urlopen(req) as response:
-                    data = response.read().decode("utf-8")
+                with requests.get(url) as response:
+                    data = response.text
                     with threading.Lock():
                         self.data.append(json.loads(data))
                     View.render(f"Fetching {url}")

@@ -1,15 +1,15 @@
 import html
 import random
 import re
-import xml.etree.cElementTree as ET
-from urllib import request
+import requests 
+from bs4 import BeautifulSoup as HTMLParser
 from configuration.configuration import Configuration
-from .Origin import Origin
-from .Question import Question
-from .Helper import Helper
-from .View import View
+from ..Origin import Origin
+from ..Question import Question
+from ..Helper import Helper
+from ..View import View
 
-class RssOrigin(Origin, Helper):
+class MediumOrigin(Origin, Helper):
     def __init__(self, url):
         self.url = url
         self.doc = ""
@@ -17,28 +17,25 @@ class RssOrigin(Origin, Helper):
         self.data = set()
         self.config = Configuration()
 
-    @View.log("Reading RSS feeds...")
+    @View.log("Reading Medium article...")
     def pull(self):
-        View.render(self.config.literal["pull_rss_prompt"].format(self.url))
-        req = request.Request(self.url)
-        req.add_header('User-Agent', self.config.useragent)
-        with request.urlopen(req) as reponse:
-            self.doc = reponse.read().decode("utf-8")
+        View.render(self.config.literal["pull_medium_prompt"].format(self.url))
+        with requests.get(self.url) as reponse:
+            self.doc = reponse.text
         return self
 
     @View.log("Parse raw data from rss url...")
     def parse(self):
         """ parse raw data from url to a long string of texts """
-        tree = ET.fromstring(self.doc)
-        rule = re.compile(r'<[^>]+>', re.S)
-        result = ""
-        for item in tree.iter("item"):
-            for element in item:
-                if "content" in element.tag:
-                    chunk = rule.sub('', element.text)
-                    chunk = html.unescape(chunk)
-                    result = result + chunk
-        self.rawtext = result
+        parser = HTMLParser(self.doc,"html.parser")
+        paragraphs = ""
+        article = ""
+        if len(parser.findAll("article")) > 0: 
+            article = parser.findAll("article")[0]
+            article = article.findAll("p")
+            for paragraph in article:
+                paragraphs = paragraphs + paragraph.text
+            self.rawtext = paragraphs
         return self
 
     @View.log("Clean extra chars...")

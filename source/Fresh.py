@@ -2,10 +2,12 @@ import os,asyncio
 import sqlite3 as sqlite
 import threading
 from configuration.configuration import Configuration
-from .RssOrigin import RssOrigin
-from .RssSource import RssSource
-from .FileOrigin import FileOrigin
-from .FileSource import FileSource
+from .Rss.RssOrigin import RssOrigin
+from .Rss.RssSource import RssSource
+from .File.FileOrigin import FileOrigin
+from .File.FileSource import FileSource
+from .Medium.MediumOrigin import MediumOrigin
+from .Medium.MediumSource import MediumSource
 from .Keywords import Keywords
 from .View import View
 
@@ -51,11 +53,21 @@ class Fresh:
                 self.count = self.count + len(data)
         return self
 
+    @View.log("Start fresh questions from Medium...")
+    def freshMedium(self):
+        url = self.config.medium_urls
+        source = MediumSource(url, self.keywords)
+        if source.collect() != False:
+            data = source.collect().fetch().save().output()
+            with threading.Lock() as lock:
+                self.count = self.count + len(data)
+        return self
+
     def run(self):
         keywords = Keywords()
         keywords.collect().fetch().parse().user_words().save()
-
         keywords = self.getKeywords()
+
         def file_task():
             try:
                 self.setKeyword(keywords).freshFile()
@@ -68,12 +80,22 @@ class Fresh:
             except Exception as error:
                 View.red(error)
         
+        def medium_task():
+            try:
+                self.setKeyword(keywords).freshMedium()
+            except:
+                View.red(error)
+
         tasks = []
         tasks.append(threading.Thread(target=file_task))
         tasks.append(threading.Thread(target=rss_task))
+        tasks.append(threading.Thread(target=medium_task))
         for task in tasks:
             task.start()
         for task  in tasks:
             task.join()
 
         View.green(self.config.literal["fresh_questions_total"].format(self.count))
+
+    def test(self):
+        pass

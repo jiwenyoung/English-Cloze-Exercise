@@ -1,7 +1,7 @@
-from .Origin import Origin
-from .Question import Question
-from .Helper import Helper
-from .View import View
+from ..Origin import Origin
+from ..Question import Question
+from ..Helper import Helper
+from ..View import View
 from configuration.configuration import Configuration
 
 class FileOrigin(Origin, Helper):

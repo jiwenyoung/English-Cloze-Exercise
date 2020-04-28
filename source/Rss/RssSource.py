@@ -1,8 +1,8 @@
 import sys
 import threading
-from source.RssOrigin import RssOrigin
-from .Source import Source
-from .View import View
+from .RssOrigin import RssOrigin
+from ..Source import Source
+from ..View import View
 
 class RssSource(Source):
     def __init__(self,url,keywords):

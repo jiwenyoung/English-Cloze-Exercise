@@ -50,6 +50,10 @@ class Bootstrap:
         exercise = Exercise()
         exercise.run(1)
 
+    def test(self):
+        fresh = Fresh()
+        fresh.test()
+
     def main(self):
         """ ENTRY """
         self.parse_argv()
@@ -62,6 +66,8 @@ class Bootstrap:
             self.exercise()
         elif nav == "mistake":
             self.mistake()
+        elif nav == "test":
+            self.test()
         else:
             self.view.red(self.config.literal["unsupported_command"])
             sys.exit(1)
@@ -73,4 +79,5 @@ try:
     bootstrap = Bootstrap()
     bootstrap.main()
 except Exception as error:
-    view.red(error)
+    raise error
+    #view.red(error)

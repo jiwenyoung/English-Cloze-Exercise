@@ -24,7 +24,7 @@ class Helper:
             words = len(sub.split(" "))
 
             # if sentence is less than 10 words, we don't need it
-            if words > limit_words_number_lower and words < limit_words_number_upper:
+            if words > int(limit_words_number_lower) and words < int(limit_words_number_upper):
                 data.add(sub)
         return data
 
