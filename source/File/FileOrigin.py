@@ -4,13 +4,14 @@ from ..Helper import Helper
 from ..View import View
 from configuration.configuration import Configuration
 
-class FileOrigin(Origin, Helper):
+class FileOrigin(Origin):
     def __init__(self, file):
         self.file = file
         self.doc = ""
         self.rawtext = ""
         self.data = set()
         self.config = Configuration()
+        self.helper = Helper()
 
     @View.log("Reading file...")
     def pull(self):
@@ -30,17 +31,17 @@ class FileOrigin(Origin, Helper):
     @View.log("Clean extra chars...")
     def clean(self):
         rawtext = self.rawtext
-        sentences = super().separate_text(rawtext)
-        self.data = super().clean_each_sentence(sentences,
-                                                self.config.sentence_shortest,
-                                                self.config.sentence_longest)
+        sentences = self.helper.separate_text(rawtext)
+        self.data = self.helper.clean_each_sentence(sentences,
+                                                    self.config.sentence_shortest,
+                                                    self.config.sentence_longest)
         return self
 
     @View.log("Transform data into questions...")
     def filter(self, keywords):
         data = []
         sentences = self.data
-        filtered = super().transform_sentenses_to_tuples(sentences, keywords)
+        filtered = self.helper.transform_sentenses_to_tuples(sentences, keywords)
         for element in filtered:
             sentence, keyword, choices = element
             data.append(Question(sentence, keyword, choices))

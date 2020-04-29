@@ -9,13 +9,14 @@ from ..Question import Question
 from ..Helper import Helper
 from ..View import View
 
-class RssOrigin(Origin, Helper):
+class RssOrigin(Origin):
     def __init__(self, url):
         self.url = url
         self.doc = ""
         self.rawtext = ""
         self.data = set()
         self.config = Configuration()
+        self.helper = Helper()
 
     @View.log("Reading RSS feeds...")
     def pull(self):
@@ -43,8 +44,8 @@ class RssOrigin(Origin, Helper):
     def clean(self):
         """ clean extra chars in string and save data into set """
         rawtext = self.rawtext
-        sentences = super().separate_text(rawtext)
-        data = super().clean_each_sentence(sentences,
+        sentences = self.helper.separate_text(rawtext)
+        data = self.helper.clean_each_sentence(sentences,
                                            self.config.sentence_shortest,
                                            self.config.sentence_longest)
         self.data = data
@@ -55,7 +56,7 @@ class RssOrigin(Origin, Helper):
         """ transform data from sentence list to list of Question Object """
         data = []
         sentences = self.data
-        filtered = super().transform_sentenses_to_tuples(sentences, keywords)
+        filtered = self.helper.transform_sentenses_to_tuples(sentences, keywords)
         for element in filtered:
             sentence, keyword, choices = element
             data.append(Question(sentence, keyword, choices))

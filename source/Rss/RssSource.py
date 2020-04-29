@@ -5,24 +5,25 @@ from ..Source import Source
 from ..View import View
 from ..Helper import Helper
 
-class RssSource(Source, Helper):
+class RssSource(Source):
     def __init__(self, url, keywords):
         self.keywords = keywords
         self.url = url
         self.urls = []
         self.data = []
         self.status = ""
+        self.helper = Helper()
 
     @View.log("Colleting URLs of RSS feeds...")
     def collect(self):
         urls = []
-        self.status = super().isConnected()
+        self.status = self.helper.isConnected()
         with open(self.url) as file:
             all_lines = set()
             if self.status == "GLOBAL":
-                all_lines = super().read_block(file, "global-rss")
+                all_lines = self.helper.read_block(file, "global-rss")
             elif self.status == "CHINA":
-                all_lines = super().read_block(file,"china-rss")
+                all_lines = self.helper.read_block(file,"china-rss")
             else:
                 View.red("Check your network connection...")
                 sys.exit(1)

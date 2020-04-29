@@ -9,13 +9,14 @@ from ..Source import Source
 from ..View import View
 from ..Helper import Helper
 
-class MediumSource(Source, Helper):
+class MediumSource(Source):
     def __init__(self,file,keywords):
         self.config = Configuration()
         self.keywords = keywords
         self.file = file
         self.urls = []
         self.data = []
+        self.helper = Helper()
 
     def get_blogs_of_author(self,author):
         url = ""
@@ -63,7 +64,7 @@ class MediumSource(Source, Helper):
     def collect(self):
         urls = []
         with open(self.file) as file:
-            all_lines = super().read_block(file,"medium")
+            all_lines = self.helper.read_block(file,"medium")
             for item in all_lines:
                 if item.startswith("#"):
                     continue

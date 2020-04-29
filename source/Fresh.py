@@ -13,11 +13,12 @@ from .Keywords import Keywords
 from .View import View
 from .Helper import Helper
 
-class Fresh(Helper):
+class Fresh:
     def __init__(self):
         self.config = Configuration()
         self.count = 0
         self.status = ""
+        self.helper = Helper()
 
     @View.log("Clear data existed in database...")
     def clearDB(self):
@@ -80,7 +81,7 @@ class Fresh(Helper):
 
     def run(self):
 
-        self.status = super().isConnected()
+        self.status = self.helper.isConnected()
         if self.status == "NONETWORK":
             View.red("Network connection failure...")
 
