@@ -46,7 +46,7 @@ class Fresh:
 
     @View.log("Start fresh questions from rss feeds...")
     def freshRss(self):
-        url = self.config.rss_urls
+        url = self.config.source
         source = RssSource(url, self.keywords)
         if source.collect() != False:
             data = source.collect().fetch().save().output()
@@ -56,7 +56,7 @@ class Fresh:
 
     @View.log("Start fresh questions from Medium...")
     def freshMedium(self):
-        url = self.config.medium_urls
+        url = self.config.source
         source = MediumSource(url, self.keywords)
         if source.collect() != False:
             data = source.collect().fetch().save().output()

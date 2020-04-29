@@ -7,8 +7,9 @@ from configuration.configuration import Configuration
 from .MediumOrigin import MediumOrigin
 from ..Source import Source
 from ..View import View
+from ..Helper import Helper
 
-class MediumSource(Source):
+class MediumSource(Source, Helper):
     def __init__(self,file,keywords):
         self.config = Configuration()
         self.keywords = keywords
@@ -62,7 +63,8 @@ class MediumSource(Source):
     def collect(self):
         urls = []
         with open(self.file) as file:
-            for item in file:
+            all_lines = super().read_block(file,"medium")
+            for item in all_lines:
                 if item.startswith("#"):
                     continue
                 elif "https:" in item and f"{self.config.medium_domain}/" in item:
@@ -91,7 +93,6 @@ class MediumSource(Source):
                     for question in data:
                         self.data.append(question)
             except Exception as error:
-                #raise error
                 View.red(error)                
 
         tasks = []

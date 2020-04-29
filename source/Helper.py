@@ -2,6 +2,23 @@ import re
 import random
 
 class Helper:
+    def read_block(self, file, title):
+        """ Fetch all lines of designated block """
+        urls = set()
+        start_read = False
+        for line in file:
+            if line.strip() == "[{}]".format(title):
+                start_read = True
+                continue
+            else:
+                if start_read == True:
+                    if line == "\n" or line.startswith("["):
+                        start_read = False
+                        break
+                    else:
+                        urls.add(line.strip())
+        return urls   
+
     def separate_text(self, rawtext):
         """ split raw text into a list of sentences """
         spliters = {".", "?", ":", "!", "..."}

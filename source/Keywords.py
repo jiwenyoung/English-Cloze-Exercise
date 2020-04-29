@@ -5,8 +5,9 @@ import requests
 from queue import Queue
 from configuration.configuration import Configuration
 from .View import View
+from .Helper import Helper
 
-class Keywords:
+class Keywords(Helper):
     def __init__(self):
         self.config = Configuration()
         self.urls = set()
@@ -15,9 +16,8 @@ class Keywords:
 
     @View.log("Collect URLs for fetching keywords...")
     def collect(self):
-        with open(self.config.keyword_urls) as file:
-            for line in file:
-                self.urls.add(line.strip())
+        with open(self.config.source) as file:
+            self.urls = super().read_block(file,"keywords")
         return self
 
     @View.log("Fetching URL ...")
