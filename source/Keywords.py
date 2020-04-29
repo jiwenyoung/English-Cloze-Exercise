@@ -67,6 +67,10 @@ class Keywords:
     @View.log("Save keywords into database...")
     def save(self):
         with sqlite.connect(self.config.db_file) as connection:
+            sql = "delete from keywords"
+            connection.execute(sql)
+            connection.commit()
+
             sql = "insert into keywords values (?)"
             for word in self.data:
                 connection.execute(sql,(word,))

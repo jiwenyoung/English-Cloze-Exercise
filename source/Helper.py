@@ -73,13 +73,13 @@ class Helper:
                 choices[change_index] = keyword
             return choices
 
-        def replace_by_underscore(sentence,keyword):
+        def replace_by_underscore(sentence_wordlist,keyword):
             """ replace the keyword to ____ in sentence """
             placeholder_len = len(keyword) + 2
             placeholder = "_" * placeholder_len
-            words = sentence.split(" ")
+            words = sentence_wordlist
             for index, word in enumerate(words):
-                if word.lower() == keyword:
+                if word.lower() == keyword.lower():
                     words[index] = placeholder
                     break
             sentence = " ".join(words)
@@ -97,7 +97,7 @@ class Helper:
                     # loop every word start
                     if keyword in sentence_wordlist:
                         choices = compose_choices(keyword)
-                        sentence = replace_by_underscore(sentence,keyword)
+                        sentence = replace_by_underscore(sentence_wordlist,keyword)
                         filtered.append((sentence, keyword, set(choices)))
                         break
             return filtered

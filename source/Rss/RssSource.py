@@ -16,7 +16,8 @@ class RssSource(Source):
         urls = []
         with open(self.url) as file:
             for url in file:
-                urls.append(url.strip())
+                if not url.startswith("#"):
+                    urls.append(url.strip())
         self.urls = list(set(urls))
         if len(self.urls) == 0:
             return False

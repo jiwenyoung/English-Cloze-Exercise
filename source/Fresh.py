@@ -64,8 +64,16 @@ class Fresh:
         return self
 
     def run(self):
+        is_ignore_default_keywords = input(self.config.literal["is_ignore_default_keywords"])
+        is_ignore_default_keywords = is_ignore_default_keywords.lower()
+        if is_ignore_default_keywords == "":
+            is_ignore_default_keywords = "n"
+
         keywords = Keywords()
-        keywords.collect().fetch().parse().user_words().save()
+        if is_ignore_default_keywords == 'y':
+            keywords.user_words().save()
+        else:
+            keywords.collect().fetch().parse().user_words().save()
         keywords = self.getKeywords()
 
         def file_task():

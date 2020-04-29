@@ -27,6 +27,7 @@ class Bootstrap:
             default="exam"
         )
         args = parser.parse_args()
+        print(args)
         self.arguments = args
         return self
 
