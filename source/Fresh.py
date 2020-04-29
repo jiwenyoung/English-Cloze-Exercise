@@ -1,4 +1,4 @@
-import os
+import os,sys
 import asyncio
 import sqlite3 as sqlite
 import threading
@@ -11,11 +11,25 @@ from .Medium.MediumOrigin import MediumOrigin
 from .Medium.MediumSource import MediumSource
 from .Keywords import Keywords
 from .View import View
+from .Helper import Helper
 
-class Fresh:
+class Fresh(Helper):
     def __init__(self):
         self.config = Configuration()
         self.count = 0
+        self.status = ""
+
+    @View.log("Clear data existed in database...")
+    def clearDB(self):
+        with sqlite.connect(self.config.db_file) as connection:
+            sqls = [
+                "delete from questions",
+                "delete from keywords"
+            ]
+            for sql in sqls:
+                connection.execute(sql)
+                connection.commit()
+        return self
 
     def setKeyword(self, keywords):
         self.keywords = keywords
@@ -65,12 +79,22 @@ class Fresh:
         return self
 
     def run(self):
+
+        self.status = super().isConnected()
+        if self.status == "NONETWORK":
+            View.red("Network connection failure...")
+
+        self.clearDB()
+
+        #Decide if ignore keywords from network source
         is_ignore_default_keywords = input(
-            self.config.literal["is_ignore_default_keywords"])
+            self.config.literal["is_ignore_default_keywords"]
+        )
         is_ignore_default_keywords = is_ignore_default_keywords.lower()
         if is_ignore_default_keywords == "":
             is_ignore_default_keywords = "n"
 
+        #Get keywords list
         keywords = Keywords()
         if is_ignore_default_keywords == 'y':
             keywords.user_words().save()
@@ -78,6 +102,7 @@ class Fresh:
             keywords.collect().fetch().parse().user_words().save()
         keywords = self.getKeywords()
 
+        #Compose questions from all source
         def file_task():
             try:
                 self.setKeyword(keywords).freshFile()
@@ -98,8 +123,11 @@ class Fresh:
 
         tasks = []
         tasks.append(threading.Thread(target=file_task))
-        tasks.append(threading.Thread(target=rss_task))
-        tasks.append(threading.Thread(target=medium_task))
+        if self.status != "NONETWORK":
+            tasks.append(threading.Thread(target=rss_task))
+            if self.status == "GLOBAL":
+                tasks.append(threading.Thread(target=medium_task))
+        
         for task in tasks:
             task.start()
         for task in tasks:
@@ -109,4 +137,5 @@ class Fresh:
             self.config.literal["fresh_questions_total"].format(self.count))
 
     def test(self):
+        """ left for test new model """
         pass

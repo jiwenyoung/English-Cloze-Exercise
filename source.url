@@ -1,12 +1,23 @@
 [keywords]
 https://raw.githubusercontent.com/bahamas10/prepositions/master/prepositions.json
 
-[rss]
+[global-rss]
 https://www.helpingwritersbecomeauthors.com/feed/
 https://hackaday.com/blog/feed/
 https://lithub.com/feed/
 https://ncl.ucpress.edu/rss/current.xml
 https://blog.hartleygroup.org/feed/
+
+[china-rss]
+http://www.chinadaily.com.cn/rss/china_rss.xml
+http://www.chinadaily.com.cn/rss/bizchina_rss.xml
+http://www.chinadaily.com.cn/rss/world_rss.xml
+http://www.chinadaily.com.cn/rss/opinion_rss.xml
+http://www.chinadaily.com.cn/rss/sports_rss.xml
+http://www.chinadaily.com.cn/rss/entertainment_rss.xml
+http://www.chinadaily.com.cn/rss/lifestyle_rss.xml
+http://www.chinadaily.com.cn/rss/cndy_rss.xml
+http://usa.chinadaily.com.cn/usa_kindle.xml
 
 [medium]
 @pbennett101

@@ -1,7 +1,22 @@
 import re
 import random
+import requests
+from configuration.configuration import Configuration
 
 class Helper:
+    def isConnected(self):
+        config = Configuration()
+        try:
+            response = requests.get(config.global_check_url, timeout=2)
+            status = "GLOBAL"
+        except:
+            try:
+                response = requests.get(config.china_check_url , timeout=2)
+                status = "CHINA"
+            except:
+                status = "NONETWORK"
+        return status    
+
     def read_block(self, file, title):
         """ Fetch all lines of designated block """
         urls = set()
@@ -104,6 +119,7 @@ class Helper:
 
         def main(sentences_list, keywords):
             filtered = []
+            random.shuffle(list(sentences_list))
             for sentence in sentences_list:
                 random.shuffle(keywords)
                 for keyword in keywords:

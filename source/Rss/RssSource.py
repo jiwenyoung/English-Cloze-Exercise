@@ -11,12 +11,22 @@ class RssSource(Source, Helper):
         self.url = url
         self.urls = []
         self.data = []
+        self.status = ""
 
     @View.log("Colleting URLs of RSS feeds...")
     def collect(self):
         urls = []
+        self.status = super().isConnected()
         with open(self.url) as file:
-            all_lines = super().read_block(file, "rss")
+            all_lines = set()
+            if self.status == "GLOBAL":
+                all_lines = super().read_block(file, "global-rss")
+            elif self.status == "CHINA":
+                all_lines = super().read_block(file,"china-rss")
+            else:
+                View.red("Check your network connection...")
+                sys.exit(1)
+
             for url in all_lines:
                 if not url.startswith("#"):
                     urls.append(url.strip())
