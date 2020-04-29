@@ -27,7 +27,6 @@ class Bootstrap:
             default="exam"
         )
         args = parser.parse_args()
-        print(args)
         self.arguments = args
         return self
 
@@ -52,8 +51,8 @@ class Bootstrap:
         exercise.run(1)
 
     def test(self):
-        fresh = Fresh()
-        fresh.test()
+        """ left for test new sub-command """
+        pass
 
     def main(self):
         """ ENTRY """
@@ -73,12 +72,10 @@ class Bootstrap:
             self.view.red(self.config.literal["unsupported_command"])
             sys.exit(1)
 
-
 # start up the program
 try:
     view = View()
     bootstrap = Bootstrap()
     bootstrap.main()
 except Exception as error:
-    raise error
-    #view.red(error)
+    view.red(error)

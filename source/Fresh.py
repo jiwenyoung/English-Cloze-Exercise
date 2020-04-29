@@ -1,4 +1,5 @@
-import os,asyncio
+import os
+import asyncio
 import sqlite3 as sqlite
 import threading
 from configuration.configuration import Configuration
@@ -64,7 +65,8 @@ class Fresh:
         return self
 
     def run(self):
-        is_ignore_default_keywords = input(self.config.literal["is_ignore_default_keywords"])
+        is_ignore_default_keywords = input(
+            self.config.literal["is_ignore_default_keywords"])
         is_ignore_default_keywords = is_ignore_default_keywords.lower()
         if is_ignore_default_keywords == "":
             is_ignore_default_keywords = "n"
@@ -81,13 +83,13 @@ class Fresh:
                 self.setKeyword(keywords).freshFile()
             except Exception as error:
                 View.red(error)
-        
+
         def rss_task():
             try:
                 self.setKeyword(keywords).freshRss()
             except Exception as error:
                 View.red(error)
-        
+
         def medium_task():
             try:
                 self.setKeyword(keywords).freshMedium()
@@ -100,10 +102,11 @@ class Fresh:
         tasks.append(threading.Thread(target=medium_task))
         for task in tasks:
             task.start()
-        for task  in tasks:
+        for task in tasks:
             task.join()
 
-        View.green(self.config.literal["fresh_questions_total"].format(self.count))
+        View.green(
+            self.config.literal["fresh_questions_total"].format(self.count))
 
     def test(self):
         pass

@@ -57,12 +57,12 @@ class Keywords:
     @View.log("Append user customized keywords into list...")
     def user_words(self):
         with open(self.config.keyword_user_file) as file:
-             for word in file:
-                 if word not in self.data and word not in self.execlude:
-                     self.data.append(word)
-                 else:
-                     continue
-        return self             
+            for word in file:
+                if word not in self.data and word not in self.execlude:
+                    self.data.append(word)
+                else:
+                    continue
+        return self
 
     @View.log("Save keywords into database...")
     def save(self):
@@ -73,7 +73,7 @@ class Keywords:
 
             sql = "insert into keywords values (?)"
             for word in self.data:
-                connection.execute(sql,(word,))
+                connection.execute(sql, (word,))
                 connection.commit()
         return self
 
