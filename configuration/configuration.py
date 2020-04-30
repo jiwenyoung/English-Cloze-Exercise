@@ -3,7 +3,7 @@ from configparser import ConfigParser
 class Configuration:
     def __init__(self):
         config = ConfigParser()
-        config.read("config.ini")
+        config.read("config.ini",encoding="utf-8")
 
         for key in config:
             if key in ["files", "keys", "domain", "sentence","connection"]:

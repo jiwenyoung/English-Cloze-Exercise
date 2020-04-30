@@ -63,7 +63,7 @@ class MediumSource(Source):
     @View.log("Colleting URLs of Medium articles...")
     def collect(self):
         urls = []
-        with open(self.file) as file:
+        with open(self.file, encoding="utf-8") as file:
             all_lines = self.helper.read_block(file,"medium")
             for item in all_lines:
                 if item.startswith("#"):

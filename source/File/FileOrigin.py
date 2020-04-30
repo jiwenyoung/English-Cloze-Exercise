@@ -17,7 +17,7 @@ class FileOrigin(Origin):
     def pull(self):
         View.render(self.config.literal["pull_file_prompt"].format(self.file))
         doc = ""
-        with open(self.file) as file:
+        with open(self.file, encoding="utf-8") as file:
             for line in file:
                 doc = doc + line
         self.doc = doc

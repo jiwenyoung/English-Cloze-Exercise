@@ -18,7 +18,7 @@ class RssSource(Source):
     def collect(self):
         urls = []
         self.status = self.helper.isConnected()
-        with open(self.url) as file:
+        with open(self.url, encoding="utf-8") as file:
             all_lines = set()
             if self.status == "GLOBAL":
                 all_lines = self.helper.read_block(file, "global-rss")

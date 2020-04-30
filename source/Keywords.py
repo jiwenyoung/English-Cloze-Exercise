@@ -16,7 +16,7 @@ class Keywords(Helper):
 
     @View.log("Collect URLs for fetching keywords...")
     def collect(self):
-        with open(self.config.source) as file:
+        with open(self.config.source, encoding="utf-8") as file:
             self.urls = super().read_block(file,"keywords")
         return self
 
@@ -56,7 +56,7 @@ class Keywords(Helper):
 
     @View.log("Append user customized keywords into list...")
     def user_words(self):
-        with open(self.config.keyword_user_file) as file:
+        with open(self.config.keyword_user_file, encoding="utf-8") as file:
             for word in file:
                 if word not in self.data and word not in self.execlude:
                     self.data.append(word)
