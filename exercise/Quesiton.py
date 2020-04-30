@@ -39,14 +39,15 @@ class Question:
     def wrong_log(self, selected):
         """ if answer is wrong, log it into text file """
         now = datetime.now().strftime("%d %b %Y %H:%M:%S")
-        log = self.config.literal["wrong_log"].format(
-            now,
-            self.sentence,
-            " , ".join(self.choices),
-            selected,
-            self.keyword
-        )
-        with open(self.config.wrong_log,"at") as file:
-            file.write(log)
-            file.write("\n")
+        logs = self.config.literal["wrong_log"].split("|")
+        logs[0] = logs[0].format(now)
+        logs[1] = logs[1].format(self.sentence)
+        logs[2] = logs[2].format(" , ".join(self.choices),
+                                 selected,
+                                 self.keyword)
+        with open(self.config.wrong_log,"at",encoding="utf8") as file:
+            for log in logs:
+                file.write(log)
+                file.write("\r\n")
+            file.write("\r\n")
         return self
