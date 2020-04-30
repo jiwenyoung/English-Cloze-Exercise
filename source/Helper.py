@@ -1,6 +1,7 @@
 import re
 import random
 import requests
+import copy
 from configuration.configuration import Configuration
 
 class Helper:
@@ -11,11 +12,11 @@ class Helper:
             status = "GLOBAL"
         except:
             try:
-                response = requests.get(config.china_check_url , timeout=2)
+                response = requests.get(config.china_check_url, timeout=2)
                 status = "CHINA"
             except:
                 status = "NONETWORK"
-        return status    
+        return status
 
     def read_block(self, file, title):
         """ Fetch all lines of designated block """
@@ -32,7 +33,7 @@ class Helper:
                         break
                     else:
                         urls.add(line.strip())
-        return urls   
+        return urls
 
     def separate_text(self, rawtext):
         """ split raw text into a list of sentences """
@@ -99,7 +100,48 @@ class Helper:
 
         def compose_choices(keyword):
             """ choose other three word to compose choices """
-            choices = random.sample(keywords, 4)
+            def pick(keywords, keyword):
+                def compare(keywords, keyword, i):
+                    data = []
+                    for word in keywords:
+                        if i < len(word) and i < len(keyword):
+                            if keyword[i] == word[i]:
+                                data.append(word)
+                    return data
+
+                i = 0
+                choices = []
+                original = copy.deepcopy(keywords)
+                while True:
+                    keywords = compare(keywords, keyword, i)
+                    i = i + 1
+                    if len(keywords) <= 4:
+                        if keyword not in keywords:
+                            keywords.append(keyword)
+                        if len(keywords) <= 4:
+                            difference_count = 4 - len(keywords)
+                            difference = list(
+                                set(original).difference(set(keywords))
+                            )
+                            addition = random.sample(
+                                difference, difference_count
+                            )
+                            choices.append([*keywords, *addition])
+                        else:
+                            choices.append(keywords)
+                        break
+                    else:
+                        choices.append(keywords)
+
+                choices = choices[-1]
+                choices.remove(keyword)
+                choices = random.sample(choices, 3)
+                choices.append(keyword)
+                choices = list(set(choices))
+                random.shuffle(choices)
+                return choices
+
+            choices = pick(keywords, keyword)
             if keyword not in choices:
                 change_index = random.randint(0, 3)
                 choices[change_index] = keyword
