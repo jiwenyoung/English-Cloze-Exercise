@@ -78,4 +78,5 @@ try:
     bootstrap = Bootstrap()
     bootstrap.main()
 except Exception as error:
+    raise error
     view.red(error)
