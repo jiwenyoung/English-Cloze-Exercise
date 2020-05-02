@@ -10,8 +10,10 @@ class Words:
         self.view = View()
 
     def push(self, word):
-        with open(self.config.keyword_user_file, 'a+b') as file:
-            file.write(word)
+        wordlist = self.pull()
+        if word not in wordlist:
+            with open(self.config.keyword_user_file, 'a+b') as file:
+                file.write(word)
         return self
 
     def pull(self):
@@ -72,7 +74,7 @@ class Words:
             arg_str = ""
             for arg in args:
                 arg_str = arg_str + f" {arg}"
-            arguments = set(arg_str.split(","))
+            arguments = list(set(arg_str.split(",")))
             return arguments
 
         def compose_single_arg(args):
