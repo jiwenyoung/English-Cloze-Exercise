@@ -5,6 +5,7 @@ from source.Fresh import Fresh
 from database.Setup import Setup
 from exercise.Exercise import Exercise
 from database.Setup import Setup
+from words.Words import Words
 
 class View:
     def red(self, text):
@@ -50,6 +51,10 @@ class Bootstrap:
         exercise = Exercise()
         exercise.run(1)
 
+    def keywords(self):
+        words = Words()
+        words.run()
+
     def test(self):
         """ left for test new sub-command """
         pass
@@ -66,6 +71,10 @@ class Bootstrap:
             self.exercise()
         elif nav == "mistake":
             self.mistake()
+        elif nav == "keywords":    
+            self.keywords()
+        elif nav == "server":
+            pass
         elif nav == "test":
             self.test()
         else:
