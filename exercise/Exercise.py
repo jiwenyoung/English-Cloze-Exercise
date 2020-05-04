@@ -8,7 +8,7 @@ class Exercise:
     def __init__(self):
         self.config = Configuration()
         self.done = set()
-        self.question = object()
+        self.question = None
         self.view = View()
         self.score = {
             "correct": 0,
@@ -113,3 +113,9 @@ class Exercise:
 
         except Exception as error:
             raise error
+
+    def output(self):
+        if self.question != None:
+            return self.question
+        else:
+            return False
