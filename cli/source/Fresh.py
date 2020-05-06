@@ -79,25 +79,34 @@ class Fresh:
                 self.count = self.count + len(data)
         return self
 
-    def run(self):
-
+    def run(self, is_ask_user_input=0):
         self.status = self.helper.isConnected()
         if self.status == "NONETWORK":
             View.red("Network connection failure...")
 
         self.clearDB()
 
-        #Decide if ignore keywords from network source
-        is_ignore_default_keywords = input(
-            self.config.literal["is_ignore_default_keywords"]
-        )
-        is_ignore_default_keywords = is_ignore_default_keywords.lower()
-        if is_ignore_default_keywords == "":
-            is_ignore_default_keywords = "n"
+        is_ignore_default_keywords = False
+        if is_ask_user_input == 0:
+            #Decide if ignore keywords from network source
+            is_ignore_default_keywords = input(
+                self.config.literal["is_ignore_default_keywords"]
+            )
+            is_ignore_default_keywords = is_ignore_default_keywords.lower()
+            if is_ignore_default_keywords == "":
+                is_ignore_default_keywords = "n"
+            if is_ignore_default_keywords == "n":
+                is_ignore_default_keywords = False
+            else:
+                is_ignore_default_keywords = True
+        elif is_ask_user_input == 1:
+            is_ignore_default_keywords = True
+        elif is_ask_user_input == 2:
+            is_ignore_default_keywords = False
 
         #Get keywords list
         keywords = Keywords()
-        if is_ignore_default_keywords == 'y':
+        if is_ignore_default_keywords == True:
             keywords.user_words().save()
         else:
             keywords.collect().fetch().parse().user_words().save()

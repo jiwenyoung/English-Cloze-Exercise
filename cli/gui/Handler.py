@@ -1,6 +1,9 @@
+import sys
 from exercise.Exercise import Exercise
 from collections import deque
-import time
+from source.Fresh import Fresh
+from database.Setup import Setup
+from .OutputLog import OutputLog
 
 Storage = {
     "exercise" : Exercise(),
@@ -40,7 +43,30 @@ class Handler:
         return response
 
     def fresh(self):
-        mylist = [{'a': "c"}, {'b': "e"}, {'c': 6}]
-        for item in mylist:
-            time.sleep(1)
-            yield item
+        try:
+            fresh = Fresh()
+            log = OutputLog()
+            console = sys.stdout
+            sys.stdout = log
+            fresh.run(2)
+            sys.stdout = console
+            summary = log.log[-1]
+            return summary
+        except Exception as error:
+            return {
+                "error" : str(error)
+            }
+
+    def setup(self):
+        try:
+            dbsetup = Setup()
+            log = OutputLog()
+            console = sys.stdout
+            sys.stdout = log
+            dbsetup.run()
+            sys.stdout = console
+            return log.log[-1]
+        except Exception as error:
+            return {
+                "error" : str(error)
+            }

@@ -4,9 +4,9 @@ import sqlite3 as sqlite
 from configuration.configuration import Configuration
 from .View import View
 
-
 class Setup:
     def __init__(self):
+        print()
         self.config = Configuration()
 
     @View.log(text="Cleaning existed tables...")
@@ -20,19 +20,14 @@ class Setup:
             tables = cursor.execute(show_table_sql)
             tables = tables.fetchall()
             if len(tables) > 0:
-                is_drop_tables = input("Do you want to drop tables?(Y/N)")
-                is_drop_tables = is_drop_tables.lower()
-                if is_drop_tables == "y" or is_drop_tables == "yes":
-                    drop_table_sqls = []
-                    drop_table_sqls.append("drop table questions")
-                    drop_table_sqls.append("drop table keywords")
-                    for index, sql in enumerate(drop_table_sqls):
-                        connection.execute(sql)
-                        connection.commit()
-                        View.progress(len(drop_table_sqls), index)
-                    print("\n", end="\n")
-                else:
-                    sys.exit(0)
+                drop_table_sqls = []
+                drop_table_sqls.append("drop table questions")
+                drop_table_sqls.append("drop table keywords")
+                for index, sql in enumerate(drop_table_sqls):
+                    connection.execute(sql)
+                    connection.commit()
+                    View.progress(len(drop_table_sqls), index)
+                print("\n", end="\n")
         return self
 
     @View.log(text="Create new database structure...")
@@ -62,6 +57,8 @@ class Setup:
                 connection.execute(sql)
                 View.progress(len(sqls), index)
             print("\n", end="\n")
+            print()
+            print("Database Setup Finished...")
 
             connection.commit()
             return self
