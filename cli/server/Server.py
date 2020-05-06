@@ -2,7 +2,6 @@ import json
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib import parse
 from exercise.Exercise import Exercise
-from pprint import pprint
 from configuration.configuration import Configuration
 
 #Globale Variables

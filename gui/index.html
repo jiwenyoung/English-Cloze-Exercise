@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Cloze</title>
+</head>
+
+<body>
+    <h1>English Cloze</h1>
+    <section id="container"></section>
+    <button id="answer">ANSWER</button>
+    <script>
+        const { ipcRenderer } = require('electron')
+        ipcRenderer.on('ping', function (event, message) {
+            console.log(message);
+        });
+    </script>
+    <script type="module" src="./index.js" async></script>
+</body>
+
+</html>

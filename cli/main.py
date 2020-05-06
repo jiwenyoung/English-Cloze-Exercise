@@ -7,6 +7,7 @@ from exercise.Exercise import Exercise
 from database.Setup import Setup
 from words.Words import Words
 from server.Server import Server
+from gui.Gui import Gui
 
 class View:
     def red(self, text):
@@ -57,8 +58,11 @@ class Bootstrap:
         words.run()
 
     def server(self):
-        #server = Server()
         Server.run()
+
+    def gui(self):
+        gui = Gui()
+        gui.run()
 
     def test(self):
         """ left for test new sub-command """
@@ -80,6 +84,8 @@ class Bootstrap:
             self.keywords()
         elif nav == "server":
             self.server()
+        elif nav == "gui":
+            self.gui()
         elif nav == "test":
             self.test()
         else:
@@ -92,5 +98,5 @@ try:
     bootstrap = Bootstrap()
     bootstrap.main()
 except Exception as error:
-    raise error
+    #raise error
     view.red(error)
