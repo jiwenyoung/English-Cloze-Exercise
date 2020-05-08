@@ -1,9 +1,11 @@
 import sys
+import sqlite3 as sqlite
 from exercise.Exercise import Exercise
 from collections import deque
 from source.Fresh import Fresh
 from database.Setup import Setup
 from .OutputLog import OutputLog
+from configuration.configuration import Configuration
 
 Storage = {
     "exercise" : Exercise(),
@@ -12,6 +14,7 @@ Storage = {
 
 class Handler:
     def __init__(self):
+        self.config = Configuration()
         self.exercise = Storage["exercise"]
         self.question = Storage["question"]
 
@@ -30,14 +33,17 @@ class Handler:
         question = self.question.pop()
         response = {
             "evaluate" : False,
+            "info" : "",
             "score" : self.exercise.score
         }
         if question.evaluate(answer):
             response["evaluate"] = True
+            response["info"] = self.config.literal["right"]
             response["score"]["correct"] += 1 
             question.correct_remove()
         else:
             response["evaluate"] = False
+            response["info"] = self.config.literal["wrong"].format(question.keyword)
             response["score"]["wrong"] += 1
             question.wrong_update().wrong_log(answer)
         return response
@@ -54,7 +60,7 @@ class Handler:
             return summary
         except Exception as error:
             return {
-                "error" : str(error)
+                "line" : str(error)
             }
 
     def setup(self):
@@ -67,6 +73,37 @@ class Handler:
             sys.stdout = console
             return log.log[-1]
         except Exception as error:
+            raise error
             return {
+                "line" : str(error)
+            }
+
+    def remove(self):
+        try:
+            question = self.question.pop()
+            question.correct_remove()
+            return {
+                "done" : True
+            }
+        except Exception as error:
+            return {
+                "done" : False,
+                "error" : str(error)
+            }
+
+    def total(self):
+        try:
+            with sqlite.connect(self.config.db_file) as connection:
+                cursor = connection.cursor()
+                sql = "select count(*) from questions"
+                rows = cursor.execute(sql)
+                rows = rows.fetchall()
+                return {
+                    "done" : True,
+                    "total" : rows[0][0]
+                }
+        except Exception as error:
+            return {
+                "done" : False,
                 "error" : str(error)
             }

@@ -1,9 +1,9 @@
 const net = require('net');
 
-const server = (port, address) => {
-    const connection = net.connect(port, address)
+const Server = (port, address) => {
     return {
         invoke: async (name, args = [], handler=null) => {
+            const connection = net.connect(port, address)
             let data = {
                 name: name,
                 arguments: args
@@ -41,11 +41,8 @@ const server = (port, address) => {
                     return true
                 }
             }
-        },
-        connect: () => {
-            return connection
         }
     }
 }
 
-export default server
+export default Server

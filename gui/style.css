@@ -1,0 +1,228 @@
+body,html{
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+}
+.container{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 10% 80% 10%;
+}
+header{
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    grid-column: span 12;
+    background-color: chocolate;
+}
+header h1{
+    padding-left: 20px;
+}
+header h1 i{
+    margin-right: 10px;
+}
+header ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+}
+header ul li{
+    display: flex;
+    align-items: center;
+    line-height: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: middle;
+}
+header ul li span{
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: x-large;
+    vertical-align: middle;
+}
+
+.work-space{
+    grid-column: span 12;
+    padding: 40px;
+}
+.work-space .question{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.work-space .question{
+    font-size: large;
+}
+
+.work-space .question p span{
+    display: inline-block;
+    width: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-bottom: 2px solid chocolate;
+    text-align: center;
+    font-weight: bold;
+    color: chocolate;
+}
+.work-space .question ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 0px;
+}
+.work-space .question ul li{
+    cursor: pointer;
+    margin: 20px;
+}
+.work-space .question ul li:hover{
+    color: chocolate;
+    font-weight: 900;
+}
+.work-space .question ul li b{
+    font-size: x-large;
+    margin-right: 10px;
+    color: chocolate;
+}
+
+.selected{
+    color: chocolate;
+    font-weight: bolder;
+    border-bottom: 2px solid chocolate;
+}
+
+.work-space .evaulate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+.work-space .evaulate b{
+    font-size: large;
+    font-weight: bold;
+    margin-right: 16px;
+}
+.work-space .evaulate .correct{
+    color: green;
+}
+.work-space .evaulate .wrong{
+    color: red;
+}
+.work-space .evaulate span{
+    font-weight: bold;
+    color: chocolate;
+    margin-left: 16px;
+}
+
+.work-space .operation{
+    height: 10%;
+    position: absolute;
+    bottom: 40px;
+    right: 0px;
+}
+.work-space .operation span{
+    padding: 6px;
+    font-size: small;
+    font-weight: bold;
+    color: chocolate;
+    border-radius: 6px;
+    border: 1px solid chocolate;
+    margin-right: 20px;
+    vertical-align: bottom;
+}
+.work-space .operation span:hover{
+    color: white;
+    background-color: chocolate;
+    font-size: medium;
+    cursor: pointer;
+}
+
+footer{
+    grid-column: span 12;
+    background-color: chocolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;    
+}
+footer .total{
+    margin-left: 20px;
+    color: white;
+    font-size: small;
+}
+footer .total b{
+    font-size: x-large;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+footer ul{
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    list-style: none;
+}
+footer ul li{
+    height: 100%;
+    line-height: 100%;
+    color: white;
+    margin-right: 20px;
+    cursor: pointer;
+    font-size: small;
+}
+
+.modal{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    top : 0px;
+    left: 0px;
+    background-color: rgba(0,0,0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal .dialog{
+    z-index: 1000;
+    width: 500px;
+    height: 200px;
+    background-color:rgba(255,255,255,1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: large;
+}
+.modal .dialog i{
+    margin-right: 10px;
+}
+.modal .dialog .yes-or-no{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.modal .dialog .yes-or-no button{
+    background-color: #fff;
+    border-radius: 10px;
+    border: 2px solid chocolate;
+    width: 120px;
+    margin-right: 20px;
+    cursor: pointer;
+    color: chocolate;
+}
+.modal .dialog .yes-or-no button:hover{
+    background-color: chocolate;
+    color: white;
+}

@@ -47,6 +47,7 @@ class RssSource(Source):
                     for question in data:
                         self.data.append(question)
             except Exception as error:
+                View.red(url)
                 View.red(error)
 
         tasks = []

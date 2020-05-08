@@ -55,7 +55,7 @@ class Exercise:
         while True:
             selected = input(self.config.literal["input"])
 
-            # remove this question , unimplemented
+            # remove this question
             if selected.upper() == self.config.remove_question_key:
                 self.question.correct_remove()
                 self.view.remove()
