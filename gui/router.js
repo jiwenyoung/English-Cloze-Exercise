@@ -8,8 +8,23 @@ Router.cloze = ()=>{
 }
 
 Router.source = ()=>{
-    View.source().render()
+    View.editor("Source List").render()
     Controller.source()
+}
+
+Router.config = ()=>{
+    View.editor("Configuration File").render()
+    Controller.config()
+}
+
+Router.keywords = ()=>{
+    View.editor("Key Words").render()
+    Controller.keywords()
+}
+
+Router.wronglog = ()=>{
+    View.editor("Log For Wrong", false).render()
+    Controller.wronglog()
 }
 
 Router.operation = ()=>{

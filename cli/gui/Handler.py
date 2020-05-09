@@ -3,6 +3,8 @@ import sqlite3 as sqlite
 from exercise.Exercise import Exercise
 from collections import deque
 from source.Fresh import Fresh
+from words.Words import Words
+from words.Codec import Codec
 from database.Setup import Setup
 from .OutputLog import OutputLog
 from configuration.configuration import Configuration
@@ -106,4 +108,82 @@ class Handler:
             return {
                 "done" : False,
                 "error" : str(error)
+            }
+
+    def get_source_list(self):
+        try:
+            lines = []
+            with open(self.config.source) as file:
+                for line in file:
+                    lines.append(line.strip())
+            return lines
+        except Exception as error:
+            return [ str(error) ]
+
+    def save_source_list(self, text):
+        try:
+            with open(self.config.source,'wt') as file:
+                 file.write(text)
+            return {
+                "info" : "source list has been updated"
+            }
+        except Exception as error:
+            return {
+                "info" : str(error)
+            }
+
+    def get_config(self):
+        try:
+            lines = []
+            with open(self.config.config) as file:
+                for line in file:
+                    lines.append(line.strip())
+            return lines
+        except Exception as error:
+            return [ str(error) ]
+
+    def save_config(self,text):
+        try:
+            with open(self.config.config,"wt") as file:
+                file.write(text)
+            return {
+                "info" : "config file has been modified"
+            }
+        except Exception as error:
+            return {
+                "info" : str(error)
+            }
+
+    def get_keywords(self):
+        try:
+            words = Words()
+            return list(words.pull())
+        except Exception as error:
+            return [ str(error) ]
+
+    def save_keywords(self,text):
+        try:
+            words = Words()
+            wordlist = text.split(",")
+            wordlist = [ word.strip() for word in wordlist ]
+            wordlist = [ word for word in wordlist if word != "" ]
+            wordlist = list(set(wordlist))
+            binary = words.compose(wordlist)
+            words.sync(binary)
+            return {
+                "info" : "Key words list has been modified"
+            }
+        except Exception as error:
+            return {
+                "info" : str(error)
+            }
+
+    def get_wrong_log(self):
+        try:
+            with open(self.config.wrong_log) as file:
+                for line in file:
+                    yield { "line" : line }
+        except Exception as error:
+            return {
+                "line" : str(error)
             }

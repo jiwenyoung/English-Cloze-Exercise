@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 
 let server
 
-function createWindow() {
+const createWindow = ()=> {
     // Create the browser window.
     const win = new BrowserWindow({
         width: 800,
@@ -31,7 +31,7 @@ function createWindow() {
 
 app.on("ready", () => {
     process.chdir("./cli")
-    //server = spawn("python3", ["main.py", "gui"])
+    server = spawn("python3", ["main.py", "gui"])
     setTimeout(() => {
         app.whenReady().then(createWindow)
     }, 1000);
@@ -40,7 +40,7 @@ app.on("ready", () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    //server.kill("SIGHUP")
+    server.kill("SIGHUP")
     if (process.platform !== 'darwin') {
         app.quit()
     }

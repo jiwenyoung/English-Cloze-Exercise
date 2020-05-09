@@ -1,4 +1,5 @@
-import socketserver, json
+import socketserver, json, time
+import socket
 from .Hub import Hub
 from .Handler import Handler
 
@@ -8,11 +9,14 @@ class View:
         return self
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
+    def setup(self):
+        self.connection = self.request
+
     def handle(self):
         view = View()
         try:
-            socket = self.request
-            data = socket.recv(4096).strip()
+            connection = self.connection
+            data = connection.recv(4096).strip()
             data = json.loads(data)
             name = data["name"]
             arguments = data["arguments"]
@@ -20,17 +24,21 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             if handler.is_yield_function(name):
                 for item in handler.register(name).generate(arguments):
                     response = json.dumps(item)
-                    socket.send(bytes(response, encoding="utf-8"))
+                    time.sleep(0.03)
+                    connection.sendall(bytes(response, encoding="utf-8"))
             else:
                 response = handler.register(name).run(arguments)
                 response = json.dumps(response)
-                socket.sendall(bytes(response, encoding="utf-8"))
+                connection.sendall(bytes(response, encoding="utf-8"))
         except Exception as error:
             raise error
             view.red(error)
 
 class Gui:
     def run(self):
-        HOST, PORT = "localhost", 9998
+        HOST, PORT = "localhost", 9999
         with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
+            server.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
+            server.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+            server.socket.setsockopt(socket.SOL_SOCKET,socket.SO_KEEPALIVE,True)
             server.serve_forever()

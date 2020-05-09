@@ -17,8 +17,7 @@
     "url": "https://github.com/jiwenyoung/english-gap-filling/issues"
   },
   "homepage": "https://github.com/jiwenyoung/english-gap-filling#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "electron": "^8.2.5",
     "electron-rebuild": "^1.10.1"

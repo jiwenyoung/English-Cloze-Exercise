@@ -3,8 +3,8 @@ const View = {}
 /**
  * Cloze Test
  */
-View.cloze = ()=>{
-    const html  = `<div class="question">
+View.cloze = () => {
+    const html = `<div class="question">
                         <div class="content">
                             <p></p>
                             <ul>
@@ -21,29 +21,58 @@ View.cloze = ()=>{
                         <span id="operation-next">NEXT</span>
                    </div>`
     return {
-        render : ()=>{
+        render: () => {
             View.render(html)
         }
     }
 }
- 
+
 /**
- * Source List
+ * Editor
  */
-View.source = ()=>{
-    const html = `<p>SOURCE LIST PLACE HOLDER</p>`
+View.editor = (title, save = true) => {
+    let html = "";
+    if(save === true){
+        html = `<div class="editor-panel">
+                    <h2>${title}</h2>
+                    <textarea class="editor-input" id="editor-input">
+                    </textarea>
+                    <div class="editor-buttons">
+                        <button class="editor-return">Go back</button>
+                        <button class="editor-submit">Save</button>
+                    </div>
+                </div>`
+    }else{
+        html = `<div class="editor-panel">
+                    <h2>${title}</h2>
+                    <textarea class="editor-input" id="editor-input" disabled>
+                    </textarea>
+                    <div class="editor-buttons">
+                        <button class="editor-return">Go back</button>
+                    </div>
+                </div>`
+    }
     return {
-        render : ()=>{
+        render: () => {
             View.render(html)
         }
     }
 }
 
+/**
+ * Wrong Log File
+ */
+View.wrongLog = () => {
+    const html = ``;
+    return {
 
-View.render = (html)=>{
+    }
+}
+
+View.render = (html) => {
     const workSpace = document.querySelector("section.work-space")
     workSpace.innerHTML = ""
-    workSpace.innerHTML = html 
+    workSpace.innerHTML = html
 }
 
 export default View
