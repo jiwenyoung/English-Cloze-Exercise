@@ -60,7 +60,37 @@ header ul li span{
     padding-right: 40px;
     padding-bottom: 10px;
     padding-top: 10px;
+    position: relative;
 }
+.work-space .status-buttons{
+    position: absulote;
+    top:20px;
+    left:10px;
+}
+.work-space .status-buttons span{
+    border: 1px solid chocolate;
+    width: 200px;
+    padding: 4px;
+    font-size: small;
+    font-weight: bolder;
+    cursor: pointer;
+}
+.work-space .status-buttons .new-cloze{
+    border-radius: 6px 0px 0px 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 0px;
+}
+.work-space .status-buttons .wrong-cloze{
+    border-radius: 0px 6px 6px 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.status-selected{
+    background-color: chocolate;
+    color: white;
+}
+
 .work-space .question{
     width: 100%;
     height: 100%;
@@ -110,6 +140,21 @@ header ul li span{
     font-weight: bolder;
     border-bottom: 2px solid chocolate;
 }
+.no-more-question{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+    font-weight: 900;
+    color: #ccc;
+    position: absolute;
+    top:0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
 
 .work-space .evaulate{
     display: flex;
@@ -137,7 +182,7 @@ header ul li span{
 .work-space .operation{
     height: 10%;
     position: absolute;
-    bottom: 40px;
+    bottom: 0px;
     right: 0px;
 }
 .work-space .operation span{

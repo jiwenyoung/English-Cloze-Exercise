@@ -10,9 +10,10 @@ from .OutputLog import OutputLog
 from configuration.configuration import Configuration
 
 Storage = {
-    "exercise" : Exercise(),
-    "question" : deque([],1)
+    "exercise": Exercise(),
+    "question": deque([], 1)
 }
+
 
 class Handler:
     def __init__(self):
@@ -20,32 +21,41 @@ class Handler:
         self.exercise = Storage["exercise"]
         self.question = Storage["question"]
 
-    def rollout(self):
-        question = self.exercise.pull().output()
-        self.question.append(question)
-        data = {
-            "id": question.id,
-            "sentence": question.sentence,
-            "keyword": question.keyword,
-            "choices": question.choices
-        }
-        return data
+    def rollout(self, status=0):
+        question = self.exercise.pull(status).output()
+        if question != False:
+            self.question.append(question)
+            data = {
+                "done" : True,
+                "info" : "",
+                "id": question.id,
+                "sentence": question.sentence,
+                "keyword": question.keyword,
+                "choices": question.choices
+            }
+            return data
+        else:
+            return {
+                "done" : False,
+                "info" : "No More Question"
+            }
 
-    def evaulate(self,answer):
+    def evaulate(self, answer):
         question = self.question.pop()
         response = {
-            "evaluate" : False,
-            "info" : "",
-            "score" : self.exercise.score
+            "evaluate": False,
+            "info": "",
+            "score": self.exercise.score
         }
         if question.evaluate(answer):
             response["evaluate"] = True
             response["info"] = self.config.literal["right"]
-            response["score"]["correct"] += 1 
+            response["score"]["correct"] += 1
             question.correct_remove()
         else:
             response["evaluate"] = False
-            response["info"] = self.config.literal["wrong"].format(question.keyword)
+            response["info"] = self.config.literal["wrong"].format(
+                question.keyword)
             response["score"]["wrong"] += 1
             question.wrong_update().wrong_log(answer)
         return response
@@ -62,7 +72,7 @@ class Handler:
             return summary
         except Exception as error:
             return {
-                "line" : str(error)
+                "line": str(error)
             }
 
     def setup(self):
@@ -77,7 +87,7 @@ class Handler:
         except Exception as error:
             raise error
             return {
-                "line" : str(error)
+                "line": str(error)
             }
 
     def remove(self):
@@ -85,29 +95,29 @@ class Handler:
             question = self.question.pop()
             question.correct_remove()
             return {
-                "done" : True
+                "done": True
             }
         except Exception as error:
             return {
-                "done" : False,
-                "error" : str(error)
+                "done": False,
+                "error": str(error)
             }
 
-    def total(self):
+    def total(self, status=0):
         try:
             with sqlite.connect(self.config.db_file) as connection:
                 cursor = connection.cursor()
-                sql = "select count(*) from questions"
-                rows = cursor.execute(sql)
+                sql = "select count(*) from questions where status=?"
+                rows = cursor.execute(sql, (status,))
                 rows = rows.fetchall()
                 return {
-                    "done" : True,
-                    "total" : rows[0][0]
+                    "done": True,
+                    "total": rows[0][0]
                 }
         except Exception as error:
             return {
-                "done" : False,
-                "error" : str(error)
+                "done": False,
+                "error": str(error)
             }
 
     def get_source_list(self):
@@ -118,18 +128,18 @@ class Handler:
                     lines.append(line.strip())
             return lines
         except Exception as error:
-            return [ str(error) ]
+            return [str(error)]
 
     def save_source_list(self, text):
         try:
-            with open(self.config.source,'wt') as file:
-                 file.write(text)
+            with open(self.config.source, 'wt') as file:
+                file.write(text)
             return {
-                "info" : "source list has been updated"
+                "info": "source list has been updated"
             }
         except Exception as error:
             return {
-                "info" : str(error)
+                "info": str(error)
             }
 
     def get_config(self):
@@ -140,18 +150,18 @@ class Handler:
                     lines.append(line.strip())
             return lines
         except Exception as error:
-            return [ str(error) ]
+            return [str(error)]
 
-    def save_config(self,text):
+    def save_config(self, text):
         try:
-            with open(self.config.config,"wt") as file:
+            with open(self.config.config, "wt") as file:
                 file.write(text)
             return {
-                "info" : "config file has been modified"
+                "info": "config file has been modified"
             }
         except Exception as error:
             return {
-                "info" : str(error)
+                "info": str(error)
             }
 
     def get_keywords(self):
@@ -159,31 +169,31 @@ class Handler:
             words = Words()
             return list(words.pull())
         except Exception as error:
-            return [ str(error) ]
+            return [str(error)]
 
-    def save_keywords(self,text):
+    def save_keywords(self, text):
         try:
             words = Words()
             wordlist = text.split(",")
-            wordlist = [ word.strip() for word in wordlist ]
-            wordlist = [ word for word in wordlist if word != "" ]
+            wordlist = [word.strip() for word in wordlist]
+            wordlist = [word for word in wordlist if word != ""]
             wordlist = list(set(wordlist))
             binary = words.compose(wordlist)
             words.sync(binary)
             return {
-                "info" : "Key words list has been modified"
+                "info": "Key words list has been modified"
             }
         except Exception as error:
             return {
-                "info" : str(error)
+                "info": str(error)
             }
 
     def get_wrong_log(self):
         try:
             with open(self.config.wrong_log) as file:
                 for line in file:
-                    yield { "line" : line }
+                    yield {"line": line}
         except Exception as error:
             return {
-                "line" : str(error)
+                "line": str(error)
             }

@@ -18,17 +18,21 @@ class Exercise:
     def pull(self, status=0):
         with sqlite.connect(self.config.db_file) as connetion:
             cursor = connetion.cursor()
+
+            sql = "select count(*) from questions where status=?" 
+            total = cursor.execute(sql,(status,))
+            total = total.fetchone()
+            total = total[0]
+
             sql = "select rowid,sentence,keyword,choices \
                    from questions where status=? \
                    order by random() limit 1"
             while True:
                 question = cursor.execute(sql, (status,))
-                question = question.fetchall()
-                if len(question) == 0:
+                question = question.fetchone()
+                if question == None:
                     self.view.warning(self.config.literal["no_question"])
                     sys.exit(1)
-                else:
-                    question = question[0]
 
                 id, sentence, keyword, choices = question
                 if id not in self.done:
@@ -36,7 +40,11 @@ class Exercise:
                     self.question = Question(id, sentence, keyword, choices)
                     break
                 else:
-                    continue
+                    if len(self.done) > total:
+                        self.question = None
+                        break
+                    else:
+                        continue
         return self
 
     def interact(self):

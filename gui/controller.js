@@ -2,21 +2,25 @@ import Modal from "./modal.js"
 import Router from "./router.js"
 import Question from "./question.js"
 import Server from "./server.js"
+import Editor from "./Editor.js"
 
 /**
  * Global setup for connection to backend
  */
-const host = "localhost"
-const port = 9999
+const Storage = {
+    host: "localhost",
+    port: 9999,
+    cloze_status: 0
+}
 
 const Controller = {}
 /**
  * Cloze Exercise
  */
-Controller.cloze = () => {
-    const connection = Server(port, host)
+Controller.cloze = (status = Storage.cloze_status) => {
+    const connection = Server(Storage.port, Storage.host)
     const question = Question.connect(connection)
-    question.flush()
+    question.flush(status)
 
     const choiceBtns = Question.choiceElements();
     choiceBtns.forEach(choiceBtn => {
@@ -36,93 +40,86 @@ Controller.cloze = () => {
 
     const nextBtn = document.getElementById("operation-next")
     nextBtn.addEventListener("click", (event) => {
-        question.flush()
+        question.flush(Storage.cloze_status)
     })
 
     const removeBtn = document.getElementById("operation-remove")
     removeBtn.addEventListener("click", (event) => {
-        question.remove()
+        question.remove(()=>{
+            question.flush(Storage.cloze_status)
+        },(error)=>{
+            Modal.notice(error)
+        })
     })
-}
 
-/**
- * Editor
- */
-const Editor = {}
-Editor.init = async (connection, command, args = [], seperator = "\n") => {
-    const editor = document.getElementById("editor-input")
-    const data = await connection.invoke(command, args)
-    editor.value = ""
-    for (let line of data) {
-        editor.value = editor.value + line.trim() + seperator
+    const statusBtn = {
+        "new" : document.getElementById("status-new"),
+        "wrong" : document.getElementById("status-wrong")
     }
-    return Editor
-}
-Editor.iterate = async (connection, command, args = []) => {
-    const editor = document.getElementById("editor-input")
-    editor.value = ''
-    await connection.invoke(command, args, (data) => {
-        editor.value = editor.value + data.line
+    statusBtn["new"].addEventListener("click",()=>{
+        Storage.cloze_status = 0
+        Question.flush(Storage.cloze_status)
     })
-    return Editor
-}
-Editor.save = async (connection, command, args = []) => {
-    const editor = document.getElementById("editor-input")
-    const savebtn = document.querySelector("div.editor-panel button.editor-submit")
-    savebtn.addEventListener("click", async (event) => {
-        let text = editor.value;
-        args.push(text);
-        let result = await connection.invoke(command, args)
-        Modal.notice(result.info)
-        Router.cloze()
+    statusBtn["wrong"].addEventListener("click",()=>{
+        Storage.cloze_status = 1
+        Question.flush(Storage.cloze_status)
     })
-    return Editor
-}
-Editor.cancel = () => {
-    const returnbtn = document.querySelector("div.editor-panel button.editor-return")
-    returnbtn.addEventListener("click", (event) => {
-        Router.cloze()
-    })
-    return Editor
 }
 
 /**
  * Source List 
  */
 Controller.source = async () => {
-    const connection = Server(port, host)
+    const connection = Server(Storage.port, Storage.host)
     Editor.init(connection, "get_source_list")
-    Editor.save(connection, "save_source_list")
-    Editor.cancel()
+    Editor.save(connection, "save_source_list", [], (info) => {
+        Modal.notice(info)
+        Router.cloze()
+    })
+    Editor.cancel(() => {
+        Router.cloze()
+    })
 }
 
 /**
  * Config file
  */
 Controller.config = async () => {
-    const connection = Server(port, host)
+    const connection = Server(Storage.port, Storage.host)
     Editor.init(connection, "get_config");
-    Editor.save(connection, "save_config");
-    Editor.cancel()
+    Editor.save(connection, "save_config", [], (info) => {
+        Modal.notice(info)
+        Router.cloze()
+    });
+    Editor.cancel(() => {
+        Router.cloze()
+    })
 }
 
 /**
  * Keywords 
  */
 Controller.keywords = async () => {
-    const connection = Server(port, host)
+    const connection = Server(Storage.port, Storage.host)
     Editor.init(connection, "get_keywords", [], ",")
-    Editor.save(connection, "save_keywords")
-    Editor.cancel()
+    Editor.save(connection, "save_keywords", [], (info) => {
+        Modal.notice(info)
+        Router.cloze()
+    })
+    Editor.cancel(() => {
+        Router.cloze()
+    })
 }
 
 /**
  * Wrong Log
  */
 Controller.wronglog = async () => {
-    const connection = Server(port, host)
+    const connection = Server(Storage.port, Storage.host)
     Editor.iterate(connection, 'get_wrong_log')
-    Editor.cancel()
+    Editor.cancel(() => {
+        Router.cloze()
+    })
 }
 
 /**
@@ -130,7 +127,7 @@ Controller.wronglog = async () => {
  * Where Navigation happens
  */
 Controller.operation = () => {
-    const connection = Server(port, host)
+    const connection = Server(Storage.port, Storage.host)
 
     //Prompt to deliver command to backend
     const handle = (command, args = [], text, handler) => {
@@ -153,7 +150,7 @@ Controller.operation = () => {
             let data = await connection.invoke("fresh")
             data = data.line
             Modal.waitting().end().notice(data)
-            Question.flush()
+            Question.flush(Storage.cloze_status)
         })
     })
 
@@ -162,7 +159,7 @@ Controller.operation = () => {
     freshBtn.addEventListener("click", (event) => {
         const text = "Do you want to fresh new questions?";
         handle("fresh", [], text, () => {
-            Question.flush()
+            Question.flush(Storage.cloze_status)
         })
     })
 

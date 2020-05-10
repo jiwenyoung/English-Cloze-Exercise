@@ -4,7 +4,15 @@ const View = {}
  * Cloze Test
  */
 View.cloze = () => {
-    const html = `<div class="question">
+    const html = `<div class="status-buttons">
+                      <span class="new-cloze" id="status-new">
+                          new cloze
+                      </span>
+                      <span class="wrong-cloze" id="status-wrong">
+                          wrong cloze
+                      </span>
+                  </div>
+                  <div class="question">
                         <div class="content">
                             <p></p>
                             <ul>
@@ -19,7 +27,10 @@ View.cloze = () => {
                    <div class="operation">
                         <span id="operation-remove">REMOVE</span>
                         <span id="operation-next">NEXT</span>
-                   </div>`
+                   </div>
+                   <p class='no-more-question'>
+                        No More Cloze Question
+                   </p>`
     return {
         render: () => {
             View.render(html)
