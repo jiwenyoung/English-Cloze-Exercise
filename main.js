@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const { spawn } = require('child_process');
 const path = require("path")
 
+const ENV = 'development'  //options: development / production
 let server
 
 const createWindow = () => {
@@ -18,8 +19,9 @@ const createWindow = () => {
     win.loadFile('gui/index.html')
 
     // Open the DevTools.
-    //win.webContents.openDevTools()
-
+    if(ENV === 'development'){
+        win.webContents.openDevTools()
+    }
 }
 
 // This method will be called when Electron has finished
@@ -27,12 +29,27 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 
 app.on("ready", () => {
-    //const backendpath = path.join(__dirname,"cloze") 
-    //const backend = path.join(__dirname,"cloze","cloze")
-    ///process.chdir(backendpath)
-    //server = spawn(backend, ["gui"])
-    process.chdir("./cli")
-    server = spawn("python3",["cloze", "gui"])
+    if(ENV === 'development'){
+        process.chdir("cli")
+        command = ""
+        if(process.platform === 'linux'){
+            command = "python3"
+        }else if(process.platform === 'win32'){
+            command = "python.exe"
+        }
+        server = spawn(command,["cloze.py", "gui"])
+    }else if(ENV === 'production'){
+        let file = ''
+        if(process.platform === 'linux'){
+            file = 'cloze'
+        }else if(process.platform === 'win32'){
+            file = 'cloze.exe'
+        }
+        const backendpath = path.join(__dirname,"cloze") 
+        const backend = path.join(__dirname,"cloze",file)
+        process.chdir(backendpath)
+        server = spawn(backend, ["gui"])
+    }
     app.whenReady().then(createWindow)
     server.stderr.on("data", (error) => {
         console.error(error.toString("utf-8"))
@@ -43,7 +60,7 @@ app.on("ready", () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    server.kill("SIGHUP")
+    server.kill()
     if (process.platform !== 'darwin') {
         app.quit()
     }
