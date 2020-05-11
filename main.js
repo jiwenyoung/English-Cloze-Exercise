@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const { spawn } = require('child_process');
+const path = require("path")
 
 let server
 
@@ -17,12 +18,8 @@ const createWindow = () => {
     win.loadFile('gui/index.html')
 
     // Open the DevTools.
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
 
-    //Send data to render process
-    win.webContents.on('did-finish-load', () => {
-        win.webContents.send('ping', 'whoooooooh!');
-    })
 }
 
 // This method will be called when Electron has finished
@@ -30,11 +27,15 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 
 app.on("ready", () => {
+    //const backendpath = path.join(__dirname,"cloze") 
+    //const backend = path.join(__dirname,"cloze","cloze")
+    ///process.chdir(backendpath)
+    //server = spawn(backend, ["gui"])
     process.chdir("./cli")
-    server = spawn("python3", ["main.py", "gui"])
+    server = spawn("python3",["cloze", "gui"])
     app.whenReady().then(createWindow)
     server.stderr.on("data", (error) => {
-        console.log(error.toString("utf-8"))
+        console.error(error.toString("utf-8"))
         app.quit()
     })
 })
