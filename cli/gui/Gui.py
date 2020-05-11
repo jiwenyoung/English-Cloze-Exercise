@@ -53,6 +53,9 @@ class Gui:
                 view = View()
                 view.output(f"Listening on port {PORT}\n")
                 server.serve_forever()
+        except KeyboardInterrupt as error:
+            view = View()
+            view.output("(END)\n")
         except Exception as error:
             view = View()
             view.error(str(error))
