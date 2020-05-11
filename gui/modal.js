@@ -55,8 +55,7 @@ Modal.prompt = (text, handler) => {
 Modal.waitting = () => {
     const view = `<section class="modal" id="waitting">
                       <div class="dialog">
-                          <i class="fas fa-paper-plane"></i>
-                          <p>Waiting...</p>
+                          <img src='waiting.gif'/>
                       </div>
                   </section>`
     const element = Modal.getRootOfModal("modal-box", "waitting", view)

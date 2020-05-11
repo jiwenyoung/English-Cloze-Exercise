@@ -334,6 +334,11 @@ footer ul li{
     color: white;
 }
 
+#waitting img{
+    width: 100px;
+    height: 100px;
+}
+
 .disable{
     pointer-events: none;
     color: gray!important;
