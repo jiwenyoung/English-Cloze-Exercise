@@ -190,7 +190,7 @@ class Handler:
 
     def get_wrong_log(self):
         try:
-            with open(self.config.wrong_log encoding="utf-8") as file:
+            with open(self.config.wrong_log ,encoding="utf-8") as file:
                 for line in file:
                     yield {"line": line}
         except Exception as error:
