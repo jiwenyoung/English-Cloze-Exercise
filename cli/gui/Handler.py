@@ -123,7 +123,7 @@ class Handler:
     def get_source_list(self):
         try:
             lines = []
-            with open(self.config.source) as file:
+            with open(self.config.source, encoding="utf-8") as file:
                 for line in file:
                     lines.append(line.strip())
             return lines
@@ -132,7 +132,7 @@ class Handler:
 
     def save_source_list(self, text):
         try:
-            with open(self.config.source, 'wt') as file:
+            with open(self.config.source, 'wt', encoding="utf-8") as file:
                 file.write(text)
             return {
                 "info": "source list has been updated"
@@ -145,7 +145,7 @@ class Handler:
     def get_config(self):
         try:
             lines = []
-            with open(self.config.config) as file:
+            with open(self.config.config, encoding="utf-8") as file:
                 for line in file:
                     lines.append(line.strip())
             return lines
@@ -154,7 +154,7 @@ class Handler:
 
     def save_config(self, text):
         try:
-            with open(self.config.config, "wt") as file:
+            with open(self.config.config, "wt", encoding="utf-8") as file:
                 file.write(text)
             return {
                 "info": "config file has been modified"
@@ -190,7 +190,7 @@ class Handler:
 
     def get_wrong_log(self):
         try:
-            with open(self.config.wrong_log) as file:
+            with open(self.config.wrong_log encoding="utf-8") as file:
                 for line in file:
                     yield {"line": line}
         except Exception as error:

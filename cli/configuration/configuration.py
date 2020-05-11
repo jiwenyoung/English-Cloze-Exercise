@@ -7,7 +7,7 @@ class Configuration:
         config.read("./config/config.ini",encoding="utf-8")
 
         blocks = []
-        with open("./config/config.ini") as file:
+        with open("./config/config.ini" encoding="utf-8") as file:
             for line in file:
                 if line.startswith("["):
                     block = line[1:-2]
