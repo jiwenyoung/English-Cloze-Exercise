@@ -333,3 +333,9 @@ footer ul li{
     background-color: chocolate;
     color: white;
 }
+
+.disable{
+    pointer-events: none;
+    color: gray!important;
+    border-color: gray!important;
+}

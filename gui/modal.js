@@ -27,8 +27,8 @@ Modal.prompt = (text, handler) => {
                     <div class="dialog">
                         <p>${text}</p>
                         <div class="yes-or-no">
-                            <button id="select-confirm">Confirm</button>
                             <button id="select-cancel">Cancel</button>
+                            <button id="select-confirm">Confirm</button>
                         </div>
                     </div>
                 </section>`

@@ -15,6 +15,20 @@ const Storage = {
 
 const Controller = {}
 /**
+ * Init
+ */
+Controller.init = async ()=>{
+    const connection = Server(Storage.port, Storage.host)
+    let result = await connection.invoke("is_tables_setup")
+    if(result.setup == 1){
+        const element = document.getElementById("setup-btn")
+        element.click()
+    }else if(result.setup == 2){
+        Modal.notice(result.info)
+    }
+}
+
+/**
  * Cloze Exercise
  */
 Controller.cloze = (status = Storage.cloze_status) => {

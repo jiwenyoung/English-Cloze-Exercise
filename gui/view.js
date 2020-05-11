@@ -70,16 +70,6 @@ View.editor = (title, save = true) => {
     }
 }
 
-/**
- * Wrong Log File
- */
-View.wrongLog = () => {
-    const html = ``;
-    return {
-
-    }
-}
-
 View.render = (html) => {
     const workSpace = document.querySelector("section.work-space")
     workSpace.innerHTML = ""

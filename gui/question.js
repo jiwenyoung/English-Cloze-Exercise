@@ -86,7 +86,6 @@ NoMoreQuestionArea.hide = ()=>{
     container.style.visibility = "hidden"
 }
 
-
 /**
  * format the display of evaluation result
  */
@@ -200,6 +199,20 @@ Status.update = (status)=>{
 }
 
 /**
+ * Next Button
+ */
+const NextButton = {}
+NextButton.disable = ()=> {
+    const button = document.getElementById("operation-next")
+    button.classList.add("disable")
+}
+NextButton.able = ()=>{
+    const button = document.getElementById("operation-next")
+    button.classList.remove("disable")
+}
+
+
+/**
  * No More Quesiotn in DB
  */
 const noMoreQuestion = (text)=>{
@@ -223,6 +236,7 @@ Question.flush = async (status = 0) => {
     NoMoreQuestionArea.hide()
     Options.unhighlight()
     EvaluateInfo.close()
+    NextButton.disable()
     Question.total(status)
     Status.update(status)
     const connection = Question.connection;
@@ -255,6 +269,9 @@ Question.evaluate = async (answer) => {
     //change score
     document.getElementById("correct-score").innerHTML = data.score.correct
     document.getElementById("wrong-score").innerHTML = data.score.wrong
+
+    //enable next button
+    NextButton.able()
 
     return Question
 }
@@ -292,6 +309,8 @@ Question.total = async ( status = 0 ) => {
     const connection = Question.connection;
     const result = await connection.invoke("total", [ status ])
     if (result.done === true) {
+        const totalContainer = document.getElementById("total")        
+        totalContainer.innerHTML = `Totally <b></b> cloze inside database`
         const totlaElement = document.querySelector("#total b")
         totlaElement.innerHTML = result.total
     } else {

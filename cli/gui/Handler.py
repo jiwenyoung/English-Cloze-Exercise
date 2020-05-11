@@ -197,3 +197,21 @@ class Handler:
             return {
                 "line": str(error)
             }
+
+    def is_tables_setup(self):
+        try:
+            with sqlite.connect(self.config.db_file) as connection:
+                cursor = connection.cursor()
+                sql = "select count(rowid) from sqlite_master where type='table'"
+                tablecount = cursor.execute(sql)
+                tablecount = tablecount.fetchone()
+                tablecount = tablecount[0]
+                if tablecount > 0:
+                    return { "setup" : 0 }
+                else:
+                    return { "setup" : 1 }                 
+        except Exception as error:
+            return {
+                "setup" : 2,
+                "info" : str(error)
+            }

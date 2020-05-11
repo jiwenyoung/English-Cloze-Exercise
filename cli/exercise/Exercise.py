@@ -7,7 +7,6 @@ from configuration.configuration import Configuration
 class Exercise:
     def __init__(self):
         self.config = Configuration()
-        self.done = set()
         self.question = None
         self.view = View()
         self.score = {
@@ -27,24 +26,13 @@ class Exercise:
             sql = "select rowid,sentence,keyword,choices \
                    from questions where status=? \
                    order by random() limit 1"
-            while True:
-                question = cursor.execute(sql, (status,))
-                question = question.fetchone()
-                if question == None:
-                    self.view.warning(self.config.literal["no_question"])
-                    sys.exit(1)
-
+            question = cursor.execute(sql, (status,))
+            question = question.fetchone()
+            if question == None:
+                self.question = None
+            else:
                 id, sentence, keyword, choices = question
-                if id not in self.done:
-                    self.done.add(id)
-                    self.question = Question(id, sentence, keyword, choices)
-                    break
-                else:
-                    if len(self.done) > total:
-                        self.question = None
-                        break
-                    else:
-                        continue
+                self.question = Question(id, sentence, keyword, choices)
         return self
 
     def interact(self):
@@ -107,10 +95,12 @@ class Exercise:
                 self.view.clear().header(80, "Mistakes").title("QUESTIONS")
 
             while True:
-                if status == 0:
-                    self.pull().interact()
-                elif status == 1:
-                    self.pull(status).interact()
+                self.pull(status)
+                if self.question != None:
+                    self.interact()
+                else:
+                    self.view.warning(self.config.literal["no_question"])
+                    sys.exit(1)
 
         except KeyboardInterrupt:
 

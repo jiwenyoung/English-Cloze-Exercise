@@ -16,7 +16,7 @@ class Setup:
 
             # Check if tables exists in database
             # if exists , drop it
-            show_table_sql = "select name from sqlite_master where type='table';"
+            show_table_sql = "select name from sqlite_master where type='table'"
             tables = cursor.execute(show_table_sql)
             tables = tables.fetchall()
             if len(tables) > 0:

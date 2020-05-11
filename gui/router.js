@@ -2,6 +2,10 @@ import Controller from "./controller.js"
 import View from "./view.js"
 
 const Router = {}
+Router.init = ()=>{
+    Controller.init()
+}
+
 Router.cloze = ()=>{
     View.cloze().render()
     Controller.cloze()
