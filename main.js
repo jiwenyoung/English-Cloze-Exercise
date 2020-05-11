@@ -31,18 +31,18 @@ const createWindow = () => {
 
 app.on("ready", () => {
     process.chdir("./cli")
-    //server = spawn("python3", ["main.py", "gui"])
+    server = spawn("python3", ["main.py", "gui"])
     app.whenReady().then(createWindow)
-    //server.stderr.on("data", (error) => {
-    //    console.log(error.toString("utf-8"))
-    //    app.quit()
-    //})
+    server.stderr.on("data", (error) => {
+        console.log(error.toString("utf-8"))
+        app.quit()
+    })
 })
 
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    //server.kill("SIGHUP")
+    server.kill("SIGHUP")
     if (process.platform !== 'darwin') {
         app.quit()
     }
