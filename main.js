@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const { spawn } = require('child_process');
 const path = require("path")
 
-const ENV = 'development'  //options: development / production
+const ENV = 'production'  //options: development / production
 let server
 
 const createWindow = () => {
@@ -16,7 +16,7 @@ const createWindow = () => {
     })
 
     // and load the index.html of the app.
-    win.loadFile('gui/index.html')
+    win.loadFile('gui/index.html',{ "query": { "env" : ENV } })
 
     // Open the DevTools.
     if(ENV === 'development'){

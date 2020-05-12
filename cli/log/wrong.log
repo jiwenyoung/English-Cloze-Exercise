@@ -281,3 +281,7 @@ Options are (upon , next , mid , up), you selected 'mid', but correct one is 'up
 ” This is a reasonable way for just _______ any person to acknowledge another person.
 Options are (above , amidst , about , aboard), you selected 'above', but correct one is 'about'
 
+[12 May 2020 07:30:37]
+Pandoc doesn’t natively support the “wordwrap” LaTeX package, so text does not flow ________ figures in LaTeX/pdf output.
+Options are (under , sans , around , within), you selected 'under', but correct one is 'around'
+

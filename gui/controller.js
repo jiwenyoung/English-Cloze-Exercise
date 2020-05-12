@@ -1,3 +1,7 @@
+const { shell } = require('electron')
+const querystring = require("querystring")
+const path = require("path")
+
 import Modal from "./modal.js"
 import Router from "./router.js"
 import Question from "./question.js"
@@ -12,6 +16,7 @@ const Storage = {
     port: 9999,
     cloze_status: 0
 }
+const ENV = querystring.parse(global.location.search)["?env"]
 
 const Controller = {}
 /**
@@ -96,6 +101,20 @@ Controller.source = async () => {
 }
 
 /**
+ * Open the souce file folder
+ */
+Controller.file = ()=>{
+    let articleFolder = '';
+    if(ENV === 'development'){
+        articleFolder = path.join(__dirname,"..","cli","articles","*")
+    }else if(ENV === 'production'){
+        articleFolder = path.join(__dirname,"..","cloze","articles","*")
+    }
+    console.log(articleFolder)
+    shell.showItemInFolder(articleFolder)
+}
+
+/**
  * Config file
  */
 Controller.config = async () => {
@@ -177,10 +196,16 @@ Controller.operation = () => {
         })
     })
 
-    //setup source list
+    //setup url source list
     const sourceBtn = document.getElementById("source-btn")
     sourceBtn.addEventListener("click", (event) => {
         Router.source()
+    })
+
+    //setup file source folder
+    const fileBtn = document.getElementById("file-btn")
+    fileBtn.addEventListener("click",(event)=>{
+        Router.file()
     })
 
     //config file

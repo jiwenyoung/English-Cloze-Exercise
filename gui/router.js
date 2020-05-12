@@ -16,6 +16,10 @@ Router.source = ()=>{
     Controller.source()
 }
 
+Router.file = ()=>{
+    Controller.file()
+}
+
 Router.config = ()=>{
     View.editor("Configuration File").render()
     Controller.config()
