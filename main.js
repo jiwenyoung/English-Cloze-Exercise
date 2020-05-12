@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const { spawn } = require('child_process');
 const path = require("path")
 
-const ENV = 'production'  //options: development / production
+const ENV = 'development'  //options: development / production
 let server
 
 const createWindow = () => {
@@ -14,6 +14,11 @@ const createWindow = () => {
             nodeIntegration: true
         }
     })
+
+    //remove menu bar
+    if(ENV === 'production'){
+        win.removeMenu()
+    }
 
     // and load the index.html of the app.
     win.loadFile('gui/index.html',{ "query": { "env" : ENV } })
