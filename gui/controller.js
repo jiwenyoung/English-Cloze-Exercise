@@ -110,7 +110,6 @@ Controller.file = ()=>{
     }else if(ENV === 'production'){
         articleFolder = path.join(__dirname,"..","cloze","articles","*")
     }
-    console.log(articleFolder)
     shell.showItemInFolder(articleFolder)
 }
 
