@@ -1,7 +1,6 @@
 const { shell } = require('electron')
 const querystring = require("querystring")
 const path = require("path")
-const { constants } = require("fs")
 const fs = require("fs").promises
 
 import Modal from "./modal.js"
@@ -138,7 +137,7 @@ Controller.file = async ()=>{
         }
     }else if(ENV === 'production'){
         const dir = path.join(__dirname,"..","cloze","articles")
-        const file = getFirstFilename(dir)        
+        const file = await getFirstFilename(dir)        
         if( file === false ) {
             articleFolder = await createDefaultFile(dir)
         }else{
