@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const { spawn } = require('child_process');
 const path = require("path")
 
-const ENV = 'development'  //options: development / production
+const ENV = 'production'  //options: development / production
 let server
 
 const createWindow = () => {
@@ -10,9 +10,10 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
+        icon : path.join(__dirname,"cloze.png"),
         webPreferences: {
             nodeIntegration: true
-        }
+        },
     })
 
     //remove menu bar
