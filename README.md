@@ -22,3 +22,43 @@ In the menu
 
 As to other parts, I think the interface will explain itself well.
 
+![alt screenshot-cli](screenshot/screenshot-cli.png) 
+
+Another option is to use CLI interface program which is much smaller. You can downlaod it [here](https://github.com/jiwenyoung/English-Cloze-Exercise/releases/download/Initial/english-cloze-cli-Linux-x64.tar.xz) for Linux and [here](https://github.com/jiwenyoung/English-Cloze-Exercise/releases/download/Initial/english-cloze-cli-win32-x64.rar) for Windows.
+
+Here are the commands you should know:
+```bash 
+   cloze setup
+```
+This command is used to build necessary tables in database.
+```bash
+    cloze fresh
+```
+This command is used to fetch new clozes from all sources.
+```bash
+    cloze exercise
+```
+This command is used to do your cloze exercise. If you want to exit the program, enter __q__, and if you want to remove this cloze, enter __r__
+```bash
+    cloze mistake
+```
+This command is used to do the clozes you had done wrong.
+```bash
+    cloze keywords
+```
+This command is used to add/remove/list key words in pool. After entered it, you will come to a interface where three command can be used:
+* __add__  add new key word
+* __remove__ remove existed key word in pool
+* __list__ list all key words in pool
+```bash
+    cloze server
+```
+This will startup a server and you can get the clozes by HTTP request. You are free to make own client.
+```
+GET http://localhost:9000/rollout
+```
+Get a new cloze from database.
+```
+GET http://localhost:9000/evaluate?answer=<your picked word>
+```
+This will return if your pick is right and do corresponding operation, that is, if right, remove it from database, and if wrong, record it to log file
