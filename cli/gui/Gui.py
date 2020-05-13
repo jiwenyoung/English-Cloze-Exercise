@@ -11,9 +11,9 @@ class View:
         sys.stderr.write(f"\033[1;31m{text}\033[0m")
         return self
 
-    def output(self,text):
+    def output(self, text):
         sys.stdout.write(f"\033[1;32m{text}\033[0m")
-        return self        
+        return self
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
     def setup(self):
@@ -27,7 +27,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             data = json.loads(data)
             name = data["name"]
             arguments = data["arguments"]
-            handler = Hub(Handler)
+            token = data["token"]
+            handler = Hub(Handler, token, '12345678')
             if handler.is_yield_function(name):
                 for item in handler.register(name).generate(arguments):
                     response = json.dumps(item)
@@ -47,9 +48,12 @@ class Gui:
         try:
             HOST, PORT = "localhost", 9999
             with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
-                server.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
-                server.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
-                server.socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, True)
+                server.socket.setsockopt(
+                    socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
+                server.socket.setsockopt(
+                    socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+                server.socket.setsockopt(
+                    socket.SOL_SOCKET, socket.SO_KEEPALIVE, True)
                 view = View()
                 view.output(f"Listening on port {PORT}\n")
                 server.serve_forever()

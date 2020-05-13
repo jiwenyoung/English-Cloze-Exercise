@@ -3,10 +3,16 @@ import inspect
 class NoMethodException(Exception):
     pass
 
+class InvalidInvokeException(Exception):
+    pass
+
 class Hub:
-    def __init__(self, Instance):
-        self.instance = Instance()
-        self.function = object()
+    def __init__(self, Instance, user_token, correct_token):
+        if user_token != correct_token:
+            raise InvalidInvokeException
+        else:
+            self.instance = Instance()
+            self.function = object()
 
     def is_yield_function(self,name):
         if hasattr(self.instance,name):

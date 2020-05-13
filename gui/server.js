@@ -6,7 +6,8 @@ const Server = (port, address) => {
             const connection = net.connect(port, address)
             let data = {
                 name: name,
-                arguments: args
+                arguments: args,
+                token : "12345678"
             }
             data = JSON.stringify(data)
             connection.write(data)
