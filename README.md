@@ -1,2 +1,2 @@
 # English Cloze Exercise
-[!Screenshot](screenshot/screenshot.png) 
+[!alt Screenshot](https://raw.githubusercontent.com/jiwenyoung/English-Cloze-Exercise/master/screenshot/screenshot.png) 
