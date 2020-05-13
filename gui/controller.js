@@ -1,6 +1,8 @@
 const { shell } = require('electron')
 const querystring = require("querystring")
 const path = require("path")
+const { constants } = require("fs")
+const fs = require("fs").promises
 
 import Modal from "./modal.js"
 import Router from "./router.js"
@@ -103,12 +105,45 @@ Controller.source = async () => {
 /**
  * Open the souce file folder
  */
-Controller.file = ()=>{
+Controller.file = async ()=>{
     let articleFolder = '';
+
+    const getFirstFilename = async (dir)=>{
+        let articleFiles = await fs.readdir(dir)
+        let articleFile = ''
+        if( articleFiles.length > 0 ){
+            articleFile = articleFiles[0]
+            return articleFile
+        }else{
+            return false
+        }
+    }
+    const createDefaultFile = async (dir) =>{
+        try{
+            const file = path.join(dir,'default.txt')
+            const handler = await fs.open(file,'w')
+            await handler.close()
+            return file
+        }catch(error){
+            return false
+        }
+    }
     if(ENV === 'development'){
-        articleFolder = path.join(__dirname,"..","cli","articles","*")
+        const dir = path.join(__dirname,"..","cli","articles")
+        const file = await getFirstFilename(dir)
+        if( file === false ) {
+            articleFolder = await createDefaultFile(dir)
+        }else{
+            articleFolder = path.join(dir,file)
+        }
     }else if(ENV === 'production'){
-        articleFolder = path.join(__dirname,"..","cloze","articles","*")
+        const dir = path.join(__dirname,"..","cloze","articles")
+        const file = getFirstFilename(dir)        
+        if( file === false ) {
+            articleFolder = await createDefaultFile(dir)
+        }else{
+            articleFolder = path.join(dir,file)
+        }
     }
     shell.showItemInFolder(articleFolder)
 }
